@@ -1,0 +1,8 @@
+Converts a spreadsheet of event information to an icalendar file.
+
+Usage notes:
+Spreadsheet columns should match arguments to createEvent().
+Usage: ruby csv2ical.rb spreadsheet.csv calendar.ics
+
+Original author: Jason McLaren <jason@fnord.ca>
+Latest version is at: http://github.com/jasonmclaren/csv2ical
