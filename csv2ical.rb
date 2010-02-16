@@ -12,7 +12,7 @@ require 'tzinfo'
 # Arguments must be same as columns of spreadsheet
 def createEvent(project_name, start_date, start_time, end_date, end_time,
   presenter, discipline, description, location, contact,
-  hyperlink, francophone)
+  hyperlink, francophone, free)
   event = RiCal.Event
 
   event.summary = project_name if project_name
@@ -25,6 +25,7 @@ def createEvent(project_name, start_date, start_time, end_date, end_time,
   full_description << "\n" + hyperlink if (hyperlink && !hyperlink.empty?)
   full_description << "\nDiscipline: " + discipline if (discipline and !discipline.empty?)
   full_description << "\nEvent Francophone" if (francophone && francophone=='Y')
+  full_description << "\nFree Event" if (free && free=='Y')
   event.description = full_description
 
   # ----- Guesstimate date and time -----
@@ -94,14 +95,18 @@ row_num = 1
 cal = RiCal.Calendar
 rows.each do |row|
   row_num += 1
-  if (row.length != 12)
+  if (row.length < 13)
     if (! row.select{|x| x}.empty?)
       puts "Ignoring incomplete row " + row_num.to_s
     end
   elsif (!row[0])
     puts "Ignoring incomplete row " + row_num.to_s
   else
-    event = createEvent(*row)
+    begin
+      event = createEvent(*row)
+    rescue
+      event = nil
+    end
     cal.add_subcomponent(event) if event
   end
 end
