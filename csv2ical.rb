@@ -106,6 +106,7 @@ rows.each do |row|
       event = createEvent(*row)
     rescue
       event = nil
+      puts "Bad date for event: " + row[0]
     end
     cal.add_subcomponent(event) if event
   end
